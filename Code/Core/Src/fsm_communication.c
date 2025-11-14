@@ -6,7 +6,8 @@
 // Khai báo các biến extern cần thiết
 extern UART_HandleTypeDef huart2;
 extern CommandType command_flag;
-extern uint32_t ADC_value; // Giá trị ADC đọc được từ main
+extern uint32_t ADC_value; // Giá trị ADC toàn cục, được cập nhật trong main.c
+uint32_t ADC_old;
 
 // Cấu hình Timeout (giả sử dùng HAL_GetTick() để đơn giản, nếu dùng Timer ngắt sẽ phức tạp hơn)
 #define TIMEOUT_3S_MS 3000
@@ -22,10 +23,10 @@ void uart_communiation_fsm(void) {
         case COMM_IDLE:
             // Chờ lệnh !RST#
             if (command_flag == CMD_RST) {
-                // Chuẩn bị và gửi lệnh !ADC=XXXX#
-                uint16_t len = sprintf(str_tx, "!ADC=%lu#\r\n", ADC_value);
+                // Chuẩn bị và gửi lệnh !ADC=XXXX# (Sử dụng giá trị ADC_value hiện tại)
+                uint16_t len = sprintf(str_tx, "!ADC=%lu\r\n", ADC_value);
                 HAL_UART_Transmit(&huart2, (uint8_t*)str_tx, len, 1000);
-
+                ADC_old = ADC_value;
                 // Reset cờ lệnh và chuyển trạng thái
                 command_flag = CMD_NONE;
                 comm_fsm_state = COMM_WAITING_OK;
@@ -39,11 +40,13 @@ void uart_communiation_fsm(void) {
                 // Nhận !OK#, giao tiếp thành công, trở về IDLE
                 command_flag = CMD_NONE;
                 comm_fsm_state = COMM_IDLE;
-            } else if ((HAL_GetTick() - send_time_start) >= TIMEOUT_3S_MS) {
-                // Timeout 3 giây (3000ms), gửi lại gói tin cũ
+            }else if(command_flag == CMD_RST){
+            	comm_fsm_state = COMM_IDLE;
+            }else if ((HAL_GetTick() - send_time_start) >= TIMEOUT_3S_MS) {
+                // Timeout 3 giây (3000ms)
 
                 // Chuẩn bị và gửi lại gói tin ADC (dùng giá trị ADC_value cũ)
-                uint16_t len = sprintf(str_tx, "!ADC=%lu#\r\n", ADC_value);
+                uint16_t len = sprintf(str_tx, "!ADC=%lu\r\n", ADC_old);
                 HAL_UART_Transmit(&huart2, (uint8_t*)str_tx, len, 1000);
 
                 send_time_start = HAL_GetTick(); // Cập nhật thời điểm bắt đầu gửi lại
