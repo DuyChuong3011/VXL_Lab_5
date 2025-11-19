@@ -16,7 +16,6 @@ typedef enum {
     CMD_NONE = 0,
     CMD_RST,
     CMD_OK,
-    CMD_UNKNOWN
 } CommandType;
 
 // Biến toàn cục để lưu trạng thái parser và kết quả

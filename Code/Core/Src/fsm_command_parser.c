@@ -65,8 +65,6 @@ void command_parser_fsm(void) {
                     }
                 }
 
-                // Nếu không phải !RST# hoặc !OK#, sẽ là CMD_UNKNOWN nếu muốn xử lý
-
                 // Đã xử lý lệnh xong, reset buffer và trở lại trạng thái chờ
                 index_buffer = 0; // Reset index_buffer
                 cmd_parser_state = CMD_WAITING_START;

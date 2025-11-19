@@ -51,7 +51,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 uint8_t buffer[MAX_BUFFER_SIZE]; // Buffer chứa dữ liệu nhận được
 uint8_t index_buffer = 0;        // Chỉ mục của buffer
-uint8_t buffer_flag = 0;         // C�? báo có dữ liệu mới
+uint8_t buffer_flag = 0;         // Cờ báo có dữ liệu mới
 uint32_t ADC_value = 0;          // Biến ADC
 
 extern CommandType command_flag;
@@ -70,12 +70,6 @@ static void MX_TIM2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint8_t temp = 0;
-//void HAL_UART_RxCpltCallback ( UART_HandleTypeDef * huart ) {
-//	if ( huart->Instance == USART2 ) {
-//		HAL_UART_Transmit (& huart2 , & temp , 1 , 50) ;
-//		HAL_UART_Receive_IT (& huart2 , & temp , 1) ;
-//	}
-//}
 
 void HAL_UART_RxCpltCallback ( UART_HandleTypeDef * huart ) {
 	if ( huart->Instance == USART2 ) {

@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000029  00000000  00000000  00020070  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00010d33  00000000  00000000  00020099  2**0
+ 12 .debug_info   00010d21  00000000  00000000  00020099  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 000023e9  00000000  00000000  00030dcc  2**0
+ 13 .debug_abbrev 000023e9  00000000  00000000  00030dba  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000d70  00000000  00000000  000331b8  2**3
+ 14 .debug_aranges 00000d70  00000000  00000000  000331a8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00000c88  00000000  00000000  00033f28  2**3
+ 15 .debug_ranges 00000c88  00000000  00000000  00033f18  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  000188cc  00000000  00000000  00034bb0  2**0
+ 16 .debug_macro  000188cc  00000000  00000000  00034ba0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0000ff23  00000000  00000000  0004d47c  2**0
+ 17 .debug_line   0000ff23  00000000  00000000  0004d46c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008db95  00000000  00000000  0005d39f  2**0
+ 18 .debug_str    0008db89  00000000  00000000  0005d38f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  000eaf34  2**0
+ 19 .comment      00000053  00000000  00000000  000eaf18  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00003b48  00000000  00000000  000eaf88  2**2
+ 20 .debug_frame  00003b48  00000000  00000000  000eaf6c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -275,9 +275,8 @@ void command_parser_fsm(void) {
  800024c:	4b10      	ldr	r3, [pc, #64]	; (8000290 <command_parser_fsm+0x144>)
  800024e:	2202      	movs	r2, #2
  8000250:	701a      	strb	r2, [r3, #0]
+                    }
                 }
-
-                // Nếu không phải !RST# hoặc !OK#, sẽ là CMD_UNKNOWN nếu muốn xử lý
 
                 // Đã xử lý lệnh xong, reset buffer và trở lại trạng thái chờ
                 index_buffer = 0; // Reset index_buffer
@@ -488,10 +487,10 @@ void uart_communiation_fsm(void) {
  8000384:	20000090 	.word	0x20000090
 
 08000388 <HAL_UART_RxCpltCallback>:
-//		HAL_UART_Transmit (& huart2 , & temp , 1 , 50) ;
-//		HAL_UART_Receive_IT (& huart2 , & temp , 1) ;
-//	}
-//}
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+uint8_t temp = 0;
 
 void HAL_UART_RxCpltCallback ( UART_HandleTypeDef * huart ) {
  8000388:	b580      	push	{r7, lr}
